@@ -23,6 +23,15 @@ CThreadBase::~CThreadBase()
 {
 }
 
+void CThreadBase::setName(const char* name)
+{
+	if(name)
+	{
+		::memset(&m_Name, 0, sizeof(m_Name));
+		::strncpy(m_Name, name, sizeof(m_Name) - 1);
+	}
+}
+
 void* CThreadBase::ThreadRoutine(void * self)
 {
 	static_cast<CThreadBase*>(self)->run();

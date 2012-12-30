@@ -18,6 +18,7 @@ public:
 	virtual ~CThreadBase();
 	int start();
 	int stop();
+	void setName(const char* name);
 private:
 	static void* ThreadRoutine(void * self);
 	void run();
