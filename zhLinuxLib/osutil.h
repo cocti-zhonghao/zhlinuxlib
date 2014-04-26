@@ -294,7 +294,7 @@ struct TBitMask_N<8>
 		assert(startPos>=0 && startPos<8 && numbits >= 0);
 		if(numbits == 0) return false;
 		if(startPos + numbits > 8) numbits = 8 - startPos;
-		if((m_8bits&BitMaskAll1Mask[startPos][numbits-1]) > 0) return true;//@zh BUG FIXED -> ÔËËã·ûÓÅÏÈ¼¶
+		if((m_8bits&BitMaskAll1Mask[startPos][numbits-1]) > 0) return true;//@zh BUG FIXED -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½
 		return false;
 	}
 	int bit1()
@@ -451,7 +451,7 @@ struct TBitMask_N<32>
 		while(numbits > 0)
 		{
 			len = (8-(startPos&0x07)); len = len > numbits ? numbits : len;
-			if(m_32bits[startPos/8]&BitMaskAll1Mask[startPos&0x07][len-1] > 0) return true;
+			if((m_32bits[startPos/8]&BitMaskAll1Mask[startPos&0x07][len-1]) > 0) return true;
 			numbits -= len;
 			startPos += len;
 
