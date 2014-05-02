@@ -10,17 +10,18 @@ using std::vector;
 
 namespace NS_ZH_UTIL {
 
+	static const string _EMPTY_STRING_ = "";
+
 class CININode
 {
 	public:
 		CININode() {}
-		virtual int GetIntVal	 (int &val, int base = 10) {return -1;}
-		virtual int GetUIntVal	 (unsigned &val, int base = 10) {return -1;}
-		virtual int GetStringVal(string &val) {return -1;}
-		virtual int GetStringVal(char *buf, int buf_len) {return -1;}
-		virtual CININode* const operator[](const size_t) {return NULL;}
-		virtual CININode* const operator[](const string&) {return NULL;}
-		//virtual void AddNode(CININode* child) {}
+		virtual int GetIntVal		(int &val, int base = 10)		{return -1;}
+		virtual int GetUIntVal		(unsigned &val, int base = 10)	{return -1;}
+		virtual int GetStringVal	(string &val)					{return -1;}
+		virtual int GetStringVal	(char *buf, int buf_len)		{return -1;}
+		virtual const string& GetKey()								{return _EMPTY_STRING_; }
+		virtual CININode* const operator[](const size_t)			{return NULL;}
 		virtual ~CININode() {};
 };
 
@@ -29,10 +30,8 @@ class CINIValueNode : public CININode
 	public:
 		CINIValueNode()
 		{}
-		CINIValueNode(string& value)
-		:m_value(value){}
-		string& getValue() {return m_value;}
-		void setValue(string& value) {m_value = value;}
+		CINIValueNode(string& value):m_value(value){}
+		void SetValue(string& value) {m_value = value;}
 		void operator=(const string& value) {m_value = value;}
 	public:
 		int GetIntVal	(int &val, int base = 10);
@@ -48,46 +47,39 @@ class CINIKeyValueNode : public CINIValueNode
 	public:
 		CINIKeyValueNode()
 		{}
-		CINIKeyValueNode(string& key, string& value)
-		:CINIValueNode(value)
-		,m_key(key){}
-		string& getKey() {return m_key;}
-		void setKey(string& key) {m_key = key;}
+		CINIKeyValueNode(string& key, string& value):CINIValueNode(value),m_key(key){}
+		string& GetKey() {return m_key;}
+		void SetKey(string& key) {m_key = key;}
 	protected:
 		string m_key;
 };
 
 class CINIListNode : public CININode
 {
-	public:
-		CININode* const operator[](const size_t);
-		void AddNode(CINIValueNode& child) {m_Nodes.push_back(child);}
+public:
+	CININode* const operator[](const size_t);
+	void AddNode(CININode *child) { m_Nodes.push_back(child); }
+	void AddNode(string& val) { return AddNode(new CINIValueNode(val)); }
+	~CINIListNode();
 	private:
-		vector<CINIValueNode> m_Nodes;
+		vector<CININode*> m_Nodes;
 };
 
-class CINISectionNode : public CININode
-{
-};
 
-class CINIKeyValueSection : public CINISectionNode
+class CINISection
 {
 	public:
-		CININode* const operator[](const string&);
-		void AddNode(CINIKeyValueNode& child) {m_Nodes[child.getKey()] = child;}
-	private:
-		map<string, CINIKeyValueNode> m_Nodes;
-};
-
-class CINIConfReader;
-class CINIListSection : public CINISectionNode
-{
-	friend class CINIConfReader;
-	public:
-		CININode* const operator[](const size_t);
-		void AddNode(CINIListNode& child) {m_Nodes.push_back(child);}
-	private:
-		vector<CINIListNode> m_Nodes;
+		CINISection(string& name):m_name(name){}
+		virtual void AddNode(CININode* pNode);
+		virtual void AddNode(string& key, CININode* pNode);
+		virtual CININode* const operator[](const size_t);
+		virtual CININode* const operator[](const string&);
+		virtual ~CINISection();
+		const string& GetName() { return m_name; }
+	protected:
+		vector<CININode*> m_nodes;
+		map<string, CININode*> m_nodesMap;
+		string m_name;
 };
 
 class CINIConfReader
@@ -98,14 +90,14 @@ class CINIConfReader
 		~CINIConfReader();
 		//
 		int Read();
-		CINISectionNode* const operator[](const string&);
+		CINISection* const operator[](const string&);
 		int CurrentLine() {return m_lineNum;}
 		void clear();
 	private:
-		void AddKeyValueNode(string& section, CINIKeyValueNode& node);
-		void AddListValueNode(string& section, CINIValueNode& node, bool newListItem=false);
+		void AddSection(string& name, CINISection* pSection);
+		CINISection* AddSection(string& name);
 		string m_cfgFileName;
-		map<string, CINISectionNode*> m_sections;
+		map<string, CINISection*> m_sections;
 		int m_lineNum;
 };
 
