@@ -54,7 +54,7 @@ private:
 	MUTEX& m_mutex;
 };
 
-//用自旋锁模拟原子操作
+//鐢ㄨ嚜鏃嬮攣妯℃嫙鍘熷瓙鎿嶄綔
 struct CAtomOP
 {
 	template<typename T>
@@ -133,19 +133,19 @@ private:
 
 //
 #ifdef NO_BUILTIN_ATOM_OP
-#define __sync_fetch_and_add(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_add((P),(V))
-#define __sync_fetch_and_sub(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_sub((P),(V))
-#define __sync_fetch_and_or(P, V)  NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_or((P),(V))
-#define __sync_fetch_and_and(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_and((P),(V))
-#define __sync_fetch_and_xor(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_xor((P),(V))
-#define __sync_fetch_and_nand(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_fetch_and_nand((P),(V))
+#define __sync_fetch_and_add(P, V) NS_ZH_UTIL::CAtomOP::__sync_fetch_and_add((P),(V))
+#define __sync_fetch_and_sub(P, V) NS_ZH_UTIL::CAtomOP::__sync_fetch_and_sub((P),(V))
+#define __sync_fetch_and_or(P, V)  NS_ZH_UTIL::CAtomOP::__sync_fetch_and_or((P),(V))
+#define __sync_fetch_and_and(P, V) NS_ZH_UTIL::CAtomOP::__sync_fetch_and_and((P),(V))
+#define __sync_fetch_and_xor(P, V) NS_ZH_UTIL::CAtomOP::__sync_fetch_and_xor((P),(V))
+#define __sync_fetch_and_nand(P, V) NS_ZH_UTIL::CAtomOP::__sync_fetch_and_nand((P),(V))
 
-#define __sync_add_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_add_and_fetch((P),(V))
-#define __sync_sub_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_sub_and_fetch((P),(V))
-#define __sync_or_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_or_and_fetch((P),(V))
-#define __sync_and_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_and_and_fetch((P),(V))
-#define __sync_xor_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_xor_and_fetch((P),(V))
-#define __sync_nand_and_fetch(P, V) NS_JOYIT_UTIL::CAtomOP::__sync_nand_and_fetch((P),(V))
+#define __sync_add_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_add_and_fetch((P),(V))
+#define __sync_sub_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_sub_and_fetch((P),(V))
+#define __sync_or_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_or_and_fetch((P),(V))
+#define __sync_and_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_and_and_fetch((P),(V))
+#define __sync_xor_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_xor_and_fetch((P),(V))
+#define __sync_nand_and_fetch(P, V) NS_ZH_UTIL::CAtomOP::__sync_nand_and_fetch((P),(V))
 #endif
 //
 

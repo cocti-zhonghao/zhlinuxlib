@@ -76,6 +76,7 @@ class CINISection
 		virtual CININode* const operator[](const string&);
 		virtual ~CINISection();
 		const string& GetName() { return m_name; }
+		size_t size() {return m_nodes.size();}
 	protected:
 		vector<CININode*> m_nodes;
 		map<string, CININode*> m_nodesMap;
